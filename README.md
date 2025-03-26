@@ -18,7 +18,7 @@ Supports both JSON responses and strongly typed models.
 This is a class library project. You can clone and reference it directly:
 
 ```bash
-git clone https://github.com/yourusername/CambridgeDictionaryApi.git
+git clone https://github.com/CevdetTufan/CambridgeDictionaryApi.git
 ```
 
 Or add it to your solution as a project reference.
@@ -71,19 +71,9 @@ else
 }
 ```
 
-### Get entry details
-
-```csharp
-var entryResult = await _cambridgeApiClient.GetEntryAsync("english", "book");
-```
-
----
-
 ## 📦 Models
 
 - `DictionaryResponseModel`
-- `EntryDetailModel`
-- `NearbyEntryModel`
 - `ApiResponse<T>`
 - `ApiErrorResponse`
 
