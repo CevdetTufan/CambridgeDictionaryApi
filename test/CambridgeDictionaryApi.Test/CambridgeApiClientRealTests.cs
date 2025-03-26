@@ -1,5 +1,6 @@
 ﻿using CambridgeDictionaryApi.Handlers;
 using CambridgeDictionaryApi.Services;
+using Microsoft.Extensions.Configuration;
 
 namespace CambridgeDictionaryApi.Test;
 public class CambridgeApiClientRealTests
@@ -8,15 +9,14 @@ public class CambridgeApiClientRealTests
 
 	public CambridgeApiClientRealTests()
 	{
-		var httpClient = new HttpClient
-		{
-			BaseAddress = new Uri("https://dictionary.cambridge.org/api/v1/")
-		};
+		var configuration = new ConfigurationBuilder()
+			.AddUserSecrets<CambridgeApiClientRealTests>()
+			.Build();
 
-		string apiKey = "canbridge_dict_api_key";
+		string apiKey = configuration["Cambridge:ApiKey"];
+		string baseUrl = configuration["Cambridge:BaseUrl"];
 
-		var handler = new CambridgeRequestHandler(httpClient, apiKey);
-
+		var handler = new CambridgeRequestHandler(new HttpClient { BaseAddress = new Uri(baseUrl) }, apiKey);
 		_client = new CambridgeApiClient(handler);
 	}
 
@@ -56,6 +56,4 @@ public class CambridgeApiClientRealTests
 		var result = await _client.GetDictionaryAsync("britisht");
 		Assert.True(result != null && result.Error?.ErrorCode == "InvalidDictionary");
 	}
-
-
 }
