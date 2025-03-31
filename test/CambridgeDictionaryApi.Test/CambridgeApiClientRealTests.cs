@@ -14,8 +14,8 @@ public class CambridgeApiClientRealTests
 			.AddUserSecrets<CambridgeApiClientRealTests>()
 			.Build();
 
-		string apiKey = configuration["Cambridge:ApiKey"];
-		string baseUrl = configuration["Cambridge:BaseUrl"];
+		string apiKey = configuration["CambridgeApi:ApiKey"];
+		string baseUrl = configuration["CambridgeApi:BaseUrl"];
 
 		var requestHandler = new CambridgeRequestHandler(new HttpClient { BaseAddress = new Uri(baseUrl) }, apiKey);
 		var responseHandler = new CambridgeResponseHandler();
