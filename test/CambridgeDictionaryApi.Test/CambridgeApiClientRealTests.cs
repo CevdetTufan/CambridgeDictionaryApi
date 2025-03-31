@@ -1,6 +1,5 @@
 ﻿using CambridgeDictionaryApi.Extensions;
 using CambridgeDictionaryApi.Handlers;
-using CambridgeDictionaryApi.Models;
 using CambridgeDictionaryApi.Services;
 using Microsoft.Extensions.Configuration;
 
@@ -93,6 +92,12 @@ public class CambridgeApiClientRealTests
 	public async Task GetEntry_RealRequest_EntryContextXmlTo()
 	{
 		var result = await _client.GetEntryAsync("english-turkish", "stand");
+
+		if(result.Data?.EntryContent == null)
+		{
+			Assert.True(false);
+			return;
+		}
 
 		bool deserialized = result.Data.EntryContent.TryParseEntryContent(out var entryContent);
 
