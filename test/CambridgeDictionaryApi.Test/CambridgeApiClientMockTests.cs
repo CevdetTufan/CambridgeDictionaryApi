@@ -7,12 +7,14 @@ namespace CambridgeDictionaryApi.Test;
 public class CambridgeApiClientMockTests
 {
 	private readonly Mock<ICambridgeRequestHandler> _mockHandler;
+	private readonly Mock<ICambridgeResponseHandler> _mockResponseHandler;
 	private readonly CambridgeApiClient _client;
 
 	public CambridgeApiClientMockTests()
 	{
 		_mockHandler = new Mock<ICambridgeRequestHandler>();
-		_client = new CambridgeApiClient(_mockHandler.Object);
+		_mockResponseHandler = new Mock<ICambridgeResponseHandler>();
+		_client = new CambridgeApiClient(_mockHandler.Object, _mockResponseHandler.Object);
 	}
 
 	[Fact]

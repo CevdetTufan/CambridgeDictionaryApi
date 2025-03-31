@@ -12,8 +12,12 @@ public interface ICambridgeApiClient
 	Task<string> GetDictionaryJsonAsync(string dictCode);
 	Task<ApiResponse<DictionaryResponseModel?>> GetDictionaryAsync(string dictCode);
 
-	//Task<string> GetEntryJsonAsync(string dictCode, string entryId, string format = "html");
-	//Task<string> GetNearbyEntriesJsonAsync(string dictCode, string entryId, int count = 5);
+	//getEntries
+	Task<string> GetEntriesJsonAsync(string dictCode);
+	Task<ApiResponse<List<EntryResponseModel>?>> GetEntriesAsync(string dictCode);
 
-	
+	//getEntry
+	Task<string> GetEntryJsonAsync(string dictCode, string entryId, string format = "xml");
+	Task<ApiResponse<EntryResponseModel?>> GetEntryAsync(string dictCode, string entryId);
+
 }

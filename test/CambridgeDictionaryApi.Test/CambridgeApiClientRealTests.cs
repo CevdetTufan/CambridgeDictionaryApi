@@ -1,4 +1,6 @@
-﻿using CambridgeDictionaryApi.Handlers;
+﻿using CambridgeDictionaryApi.Extensions;
+using CambridgeDictionaryApi.Handlers;
+using CambridgeDictionaryApi.Models;
 using CambridgeDictionaryApi.Services;
 using Microsoft.Extensions.Configuration;
 
@@ -16,8 +18,9 @@ public class CambridgeApiClientRealTests
 		string apiKey = configuration["Cambridge:ApiKey"];
 		string baseUrl = configuration["Cambridge:BaseUrl"];
 
-		var handler = new CambridgeRequestHandler(new HttpClient { BaseAddress = new Uri(baseUrl) }, apiKey);
-		_client = new CambridgeApiClient(handler);
+		var requestHandler = new CambridgeRequestHandler(new HttpClient { BaseAddress = new Uri(baseUrl) }, apiKey);
+		var responseHandler = new CambridgeResponseHandler();
+		_client = new CambridgeApiClient(requestHandler, responseHandler);
 	}
 
 	//getDictionaries 
@@ -55,5 +58,45 @@ public class CambridgeApiClientRealTests
 	{
 		var result = await _client.GetDictionaryAsync("britisht");
 		Assert.True(result != null && result.Error?.ErrorCode == "InvalidDictionary");
+	}
+
+	//getEntries
+	[Fact]
+	public async Task GetEntries_RealRequest_ReturnsEntries_Json()
+	{
+		var result = await _client.GetEntriesJsonAsync("english");
+		Assert.Contains("entries", result.ToLower());
+	}
+
+	[Fact]
+	public async Task GetEntries_RealRequest_ReturnsEntries()
+	{
+		var result = await _client.GetEntriesAsync("british");
+		Assert.True(result != null && result.Data?.Count > 0);
+	}
+
+	[Fact]
+	public async Task GetEntry_Format_Test()
+	{
+		var result = await _client.GetEntryJsonAsync("english-turkish", "stand");
+		Assert.Contains("entry", result.ToLower());
+	}
+
+	[Fact]
+	public async Task GetEntry_RealRequest_ReturnsEntry()
+	{
+		var result = await _client.GetEntryAsync("english-turkish", "stand");
+		Assert.True(result != null && result.Data != null);
+	}
+
+	[Fact]
+	public async Task GetEntry_RealRequest_EntryContextXmlTo()
+	{
+		var result = await _client.GetEntryAsync("english-turkish", "stand");
+
+		bool deserialized = result.Data.EntryContent.TryParseEntryContent(out var entryContent);
+
+		Assert.True(deserialized);
+		Assert.NotNull(entryContent);
 	}
 }

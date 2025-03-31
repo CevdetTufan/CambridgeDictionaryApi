@@ -1,31 +1,26 @@
 ﻿using CambridgeDictionaryApi.Interfaces;
 using CambridgeDictionaryApi.Models;
-using System.Net;
-using System.Text.Json;
 
 namespace CambridgeDictionaryApi.Services;
 
 public class CambridgeApiClient : ICambridgeApiClient
 {
 	private readonly ICambridgeRequestHandler _requestHandler;
-	private readonly JsonSerializerOptions _jsonSerializerOptions;
+	private readonly ICambridgeResponseHandler _responseHandler;
 
-	public CambridgeApiClient(ICambridgeRequestHandler requestHandler)
+	public CambridgeApiClient(ICambridgeRequestHandler requestHandler, ICambridgeResponseHandler responseHandler)
 	{
 		_requestHandler = requestHandler;
-		_jsonSerializerOptions = new JsonSerializerOptions
-		{
-			PropertyNameCaseInsensitive = true
-		};
+		_responseHandler = responseHandler;
 	}
 
 	/// <summary>
 	/// getDictionaries with json response
 	/// </summary>
 	/// <returns></returns>
-	public Task<string> GetDictionariesJsonAsync()
+	public async Task<string> GetDictionariesJsonAsync()
 	{
-		return _requestHandler.SendGetRequestAsync("dictionaries");
+		return await _requestHandler.SendGetRequestAsync("dictionaries");
 	}
 
 
@@ -33,54 +28,66 @@ public class CambridgeApiClient : ICambridgeApiClient
 	/// getDictionaries with ApiResponse response
 	/// </summary>
 	/// <returns></returns>
-	public Task<ApiResponse<List<DictionaryResponseModel>?>> GetDictionariesAsync()
+	public async Task<ApiResponse<List<DictionaryResponseModel>?>> GetDictionariesAsync()
 	{
-		return GetApiResponseAsync<List<DictionaryResponseModel>?, ApiErrorResponse>("dictionaries");
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync("dictionaries");
+		return _responseHandler.HandleResponse<List<DictionaryResponseModel>?, ApiErrorResponse>(statusCode, json);
 	}
 
-	public Task<string> GetDictionaryJsonAsync(string dictCode)
+	/// <summary>
+	/// getDictionary with json response
+	/// </summary>
+	/// <param name="dictCode"></param>
+	/// <returns></returns>
+	public async Task<string> GetDictionaryJsonAsync(string dictCode)
 	{
-		return _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}");
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}");
 	}
 
-	public Task<ApiResponse<DictionaryResponseModel?>> GetDictionaryAsync(string dictCode)
+	/// <summary>
+	/// getDictionary with ApiResponse response
+	/// </summary>
+	/// <param name="dictCode"></param>
+	/// <returns></returns>
+	public async Task<ApiResponse<DictionaryResponseModel?>> GetDictionaryAsync(string dictCode)
 	{
-		return GetApiResponseAsync<DictionaryResponseModel?, ApiErrorResponse>($"dictionaries/{dictCode}");
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}");
+		return _responseHandler.HandleResponse<DictionaryResponseModel?, ApiErrorResponse>(statusCode, json);
 	}
 
-
-	#region Helper
-	private async Task<ApiResponse<TSuccess>> GetApiResponseAsync<TSuccess, TError>(string endpoint) where TError : ApiErrorResponse, new()
+	/// <summary>
+	/// getEntries with json response
+	/// </summary>
+	/// <param name="dictCode"></param>
+	/// <returns></returns>
+	public async Task<string> GetEntriesJsonAsync(string dictCode)
 	{
-		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync(endpoint);
-
-		if (statusCode == HttpStatusCode.OK)
-		{
-			var data = JsonSerializer.Deserialize<TSuccess>(json, _jsonSerializerOptions);
-			return new ApiResponse<TSuccess> { IsSuccess = true, Data = data };
-		}
-
-		TError? error;
-
-		try
-		{
-			error = JsonSerializer.Deserialize<TError>(json, _jsonSerializerOptions);
-		}
-		catch
-		{
-			error = new TError
-			{
-				ErrorMessage = "Unknown error occurred",
-				ErrorCode = statusCode.ToString()
-			};
-		}
-
-		return new ApiResponse<TSuccess>
-		{
-			IsSuccess = false,
-			Error = error
-		};
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/entries");
 	}
-	#endregion
+
+	/// <summary>
+	/// getEntries with ApiResponse response
+	/// </summary>
+	/// <param name="dictCode"></param>
+	/// <returns></returns>
+	public async Task<ApiResponse<List<EntryResponseModel>?>> GetEntriesAsync(string dictCode)
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/entries");
+		return _responseHandler.HandleResponse<List<EntryResponseModel>?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//getEntry
+	//getEntry with json response
+	public async Task<string> GetEntryJsonAsync(string dictCode, string entryId, string format = "xml")
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/entries/{entryId}?format={format}");
+	}
+
+	//getEntry with ApiResponse response
+	public async Task<ApiResponse<EntryResponseModel?>> GetEntryAsync(string dictCode, string entryId)
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/entries/{entryId}?format=xml");
+		return _responseHandler.HandleResponse<EntryResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
 }
 

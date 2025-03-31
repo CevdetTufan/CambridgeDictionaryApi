@@ -23,7 +23,7 @@ public class CambridgeRequestHandler : ICambridgeRequestHandler
 		return await response.Content.ReadAsStringAsync();
 	}
 
-	public async Task<(HttpStatusCode StatusCode, string Content)> SendGetRequestWithStatusAsync(string endpoint)
+    async Task<(HttpStatusCode StatusCode, string Content)> ICambridgeRequestHandler.SendGetRequestWithStatusAsync(string endpoint)
 	{
 		var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
 		request.Headers.Add("AccessKey", _accessKey);
@@ -32,5 +32,4 @@ public class CambridgeRequestHandler : ICambridgeRequestHandler
 
 		return (response.StatusCode, await response.Content.ReadAsStringAsync());
 	}
-
 }
