@@ -1,5 +1,6 @@
 ﻿using CambridgeDictionaryApi.Interfaces;
 using CambridgeDictionaryApi.Models;
+using CambridgeDictionaryApi.Models.ApiBase;
 
 namespace CambridgeDictionaryApi.Services;
 
@@ -88,6 +89,41 @@ public class CambridgeApiClient : ICambridgeApiClient
 	{
 		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/entries/{entryId}?format=xml");
 		return _responseHandler.HandleResponse<EntryResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//getNearbyEntries with json response
+	public async Task<string> GetNearbyEntriesJsonAsync(string dictCode, string entryId, int entryNumber = 5)
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/entries/{entryId}/nearbyentries/?entrynumber={entryNumber}");
+	}
+
+	//getNearbyEntries with ApiResponse response
+	public async Task<ApiResponse<NearbyEntryResponseModel?>> GetNearbyEntriesAsync(string dictCode, string entryId, int entryNumber = 5)
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/entries/{entryId}/nearbyentries/?entrynumber={entryNumber}");
+		return _responseHandler.HandleResponse<NearbyEntryResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+
+
+	/// <summary>
+	/// getEntryPronunciations with json response
+	/// </summary>
+	/// <param name="dictCode"></param>
+	/// <param name="entryId"></param>
+	/// <param name="format">uk or us. Default Uk</param>
+	/// <param name="lang">mp3 or ogg. Default mp3</param>
+	/// <returns></returns>
+	public async Task<string> GetEntryPronunciationsJsonAsync(string dictCode, string entryId, string format = "mp3", string lang = "uk")
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/entries/{entryId}/pronunciations?lang={lang}&format={format}");
+	}
+
+	//getEntryPronunciations with ApiResponse response
+	public async Task<ApiResponse<List<EntryPronunciationResponseModel>?>> GetEntryPronunciationsAsync(string dictCode, string entryId, string format = "mp3", string lang = "uk")
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/entries/{entryId}/pronunciations?lang={lang}&format={format}");
+
+		return _responseHandler.HandleResponse<List<EntryPronunciationResponseModel>?, ApiErrorResponse>(statusCode, json);
 	}
 }
 

@@ -1,5 +1,5 @@
 ﻿using CambridgeDictionaryApi.Interfaces;
-using CambridgeDictionaryApi.Models;
+using CambridgeDictionaryApi.Models.ApiBase;
 using System.Net;
 using System.Text.Json;
 

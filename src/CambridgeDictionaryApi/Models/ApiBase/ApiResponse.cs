@@ -1,4 +1,4 @@
-﻿namespace CambridgeDictionaryApi.Models;
+﻿namespace CambridgeDictionaryApi.Models.ApiBase;
 public class ApiResponse<T>
 {
 	public bool IsSuccess { get; set; }

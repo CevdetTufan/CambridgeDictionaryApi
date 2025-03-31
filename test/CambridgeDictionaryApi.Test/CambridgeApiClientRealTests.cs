@@ -93,7 +93,7 @@ public class CambridgeApiClientRealTests
 	{
 		var result = await _client.GetEntryAsync("english-turkish", "stand");
 
-		if(result.Data?.EntryContent == null)
+		if (result.Data?.EntryContent == null)
 		{
 			Assert.True(false);
 			return;
@@ -103,5 +103,35 @@ public class CambridgeApiClientRealTests
 
 		Assert.True(deserialized);
 		Assert.NotNull(entryContent);
+	}
+
+	//getNearbyEntries
+	[Fact]
+	public async Task GetNearbyEntries_RealRequest_ReturnsEntries_Json()
+	{
+		var result = await _client.GetNearbyEntriesJsonAsync("english-turkish", "stand", 10);
+		Assert.Contains("entries", result.ToLower());
+	}
+
+	[Fact]
+	public async Task GetNearbyEntries_RealRequest_ReturnsEntries()
+	{
+		var result = await _client.GetNearbyEntriesAsync("english-turkish", "stand", 10);
+		Assert.True(result != null && result.Data != null);
+	}
+
+	//getEntryPronunciations
+	[Fact]
+	public async Task GetEntryPronunciations_RealRequest_ReturnsPronunciations_Json()
+	{
+		var result = await _client.GetEntryPronunciationsJsonAsync("british", "stand");
+		Assert.Contains("pronunciations", result.ToLower());
+	}
+
+	[Fact]
+	public async Task GetEntryPronunciations_RealRequest_ReturnsPronunciations()
+	{
+		var result = await _client.GetEntryPronunciationsAsync("british", "stand", "", "");
+		Assert.True(result != null && result.Data?.Count > 0);
 	}
 }

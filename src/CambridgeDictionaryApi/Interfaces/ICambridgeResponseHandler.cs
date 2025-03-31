@@ -1,4 +1,4 @@
-﻿using CambridgeDictionaryApi.Models;
+﻿using CambridgeDictionaryApi.Models.ApiBase;
 using System.Net;
 
 namespace CambridgeDictionaryApi.Interfaces;
