@@ -52,9 +52,20 @@ public interface ICambridgeApiClient
 	//getThesaurus
 	Task<string> GetThesaurusJsonAsync(string dictCode, string thesaurusName);
 
-	//getTopic
 	//getDictionaryWordOfTheDay
+
+	Task<string> GetDictionaryWordOfTheDayJsonAsync(string dictCode, string day, string format = "xml");
+
 	//getDictionaryWordOfTheDayPreview
+	Task<string> GetDictionaryWordOfTheDayPreviewJsonAsync(string dictCode, string day, string format = "xml");
+
 	//getWordOfTheDay
+	Task<string> GetWordOfTheDayJsonAsync(string day, string format = "xml");
+
+	Task<ApiResponse<EntryResponseModel?>> GetWordOfTheDayAsync(string day, string format = "xml");
+
 	//getWordOfTheDayPreview
+	Task<string> GetWordOfTheDayPreviewJsonAsync(string day, string format = "xml");
+
+	Task<ApiResponse<WordOfTheDayPreviewResponseModel?>> GetWordOfTheDayPreviewAsync(string day, string format = "xml");
 }

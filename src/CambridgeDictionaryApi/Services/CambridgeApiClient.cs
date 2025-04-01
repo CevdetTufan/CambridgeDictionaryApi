@@ -198,5 +198,40 @@ public class CambridgeApiClient : ICambridgeApiClient
 	{
 		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/topics/{thesaurusName}");
 	}
-}
 
+	//getDictionaryWordOfTheDay
+	public async Task<string> GetDictionaryWordOfTheDayJsonAsync(string dictCode, string day, string format = "xml")
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/wordoftheday/?day={day}&format={format}");
+	}
+
+	//getDictionaryWordOfTheDayPreview
+	public async Task<string> GetDictionaryWordOfTheDayPreviewJsonAsync(string dictCode, string day, string format = "xml")
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/wordoftheday/preview/?day={day}&format={format}");
+	}
+
+	//getWordOfTheDay
+	public async Task<string> GetWordOfTheDayJsonAsync(string day, string format = "xml")
+	{
+		return await _requestHandler.SendGetRequestAsync($"wordoftheday/?day={day}&format={format}");
+	}
+
+	public async Task<ApiResponse<EntryResponseModel?>> GetWordOfTheDayAsync(string day, string format = "xml")
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"wordoftheday/?day={day}&format={format}");
+		return _responseHandler.HandleResponse<EntryResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//getWordOfTheDayPreview
+	public async Task<string> GetWordOfTheDayPreviewJsonAsync(string day, string format = "xml")
+	{
+		return await _requestHandler.SendGetRequestAsync($"wordoftheday/preview/?day={day}&format={format}");
+	}
+
+	public async Task<ApiResponse<WordOfTheDayPreviewResponseModel?>> GetWordOfTheDayPreviewAsync(string day, string format = "xml")
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"wordoftheday/preview/?day={day}&format={format}");
+		return _responseHandler.HandleResponse<WordOfTheDayPreviewResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+}

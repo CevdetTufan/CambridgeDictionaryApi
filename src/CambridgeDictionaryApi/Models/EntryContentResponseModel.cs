@@ -67,6 +67,8 @@ public class DictionaryData
 	// <di> elemanları
 	[XmlElement("di")]
 	public List<DictionaryEntry>? Di { get; set; }
+
+
 }
 
 public class DictionaryEntry

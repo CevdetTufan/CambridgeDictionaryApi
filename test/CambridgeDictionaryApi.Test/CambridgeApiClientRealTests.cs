@@ -233,6 +233,51 @@ public class CambridgeApiClientRealTests
 	{
 		var result = await _client.GetThesaurusJsonAsync("english", "topics");
 		Assert.Contains("topics", result.ToLower());
-			
+	}
+
+	//getDictionaryWordOfTheDay
+	[Fact]
+	public async Task GetDictionaryWordOfTheDayJsonAsync_Test()
+	{
+		var result = await _client.GetDictionaryWordOfTheDayJsonAsync("british", "2025-04-01", "xml");
+		Assert.Contains("word", result.ToLower());
+	}
+
+	//getDictionaryWordOfTheDayPreview
+	[Fact]
+	public async Task GetDictionaryWordOfTheDayPreviewJsonAsync_Test()
+	{
+		var result = await _client.GetDictionaryWordOfTheDayPreviewJsonAsync("british", "2025-03-31", "xml");
+		Assert.Contains("word", result.ToLower());
+	}
+
+	//getWordOfTheDay
+	[Fact]
+	public async Task GetWordOfTheDay_Test()
+	{
+		var result = await _client.GetWordOfTheDayJsonAsync( "2025-03-31", "xml");
+		Assert.True(result != null);
+	}
+
+	[Fact]
+	public async Task GetWordOfTheDay_ReturnsWord()
+	{
+		var result = await _client.GetWordOfTheDayAsync("2025-03-31", "xml");
+		Assert.True(result != null && result.Data != null);
+	}
+
+	//getWordOfTheDayPreview
+	[Fact]
+	public async Task GetWordOfTheDayPreviewJsonAsync_Test()
+	{
+		var result = await _client.GetWordOfTheDayPreviewJsonAsync("2025-03-31", "xml");
+		Assert.True(result != null);
+	}
+
+	[Fact]
+	public async Task GetWordOfTheDayPreviewAsync_ReturnsWord()
+	{
+		var result = await _client.GetWordOfTheDayPreviewAsync("2025-04-02", "xml");
+		Assert.True(result != null && result.Data != null);
 	}
 }
