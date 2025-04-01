@@ -125,5 +125,78 @@ public class CambridgeApiClient : ICambridgeApiClient
 
 		return _responseHandler.HandleResponse<List<EntryPronunciationResponseModel>?, ApiErrorResponse>(statusCode, json);
 	}
+
+	//getRelatedEntries with json response
+	public async Task<string> GetRelatedEntriesJsonAsync(string dictCode, string entryId)
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/entries/{entryId}/relatedentries");
+	}
+
+	//getRelatedEntries with ApiResponse response
+	public async Task<ApiResponse<RelatedEntryResponseModel?>> GetRelatedEntriesAsync(string dictCode, string entryId)
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/entries/{entryId}/relatedentries");
+		return _responseHandler.HandleResponse<RelatedEntryResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//search with json response
+	public async Task<string> SearchJsonAsync(string dictCode, string query, int pageSize = 10, int pageIndex = 1)
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/search/?q={query}&pagesize={pageSize}&pageindex={pageIndex}");
+	}
+
+	//search with ApiResponse response
+	public async Task<ApiResponse<SearchResponseModel?>> SearchAsync(string dictCode, string query, int pageSize = 10, int pageIndex = 1)
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/search/?q={query}&pagesize={pageSize}&pageindex={pageIndex}");
+
+		return _responseHandler.HandleResponse<SearchResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//didYouMean with json response
+	public async Task<string> DidYouMeanJsonAsync(string dictCode, string query, int entryNumber = 10)
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/search/didyoumean?q={query}&entrynumber={entryNumber}");
+	}
+
+	//didYouMean with ApiResponse response
+	public async Task<ApiResponse<DidYouMeanResponseModel?>> DidYouMeanAsync(string dictCode, string query, int entryNumber = 10)
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/search/didyoumean?q={query}&entrynumber={entryNumber}");
+		return _responseHandler.HandleResponse<DidYouMeanResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//searchFirst with json response
+	public async Task<string> SearchFirstJsonAsync(string dictCode, string query, string format = "xml")
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/search/first?q={query}&format={format}");
+	}
+
+	//searchFirst with ApiResponse response
+
+	public async Task<ApiResponse<EntryResponseModel?>> SearchFirstAsync(string dictCode, string query, string format = "xml")
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/search/first?q={query}&format={format}");
+		return _responseHandler.HandleResponse<EntryResponseModel?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//getTopics with json response
+	public async Task<string> GetTopicsJsonAsync(string dictCode)
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/topics");
+	}
+
+	//getTopics with ApiResponse response
+	public async Task<ApiResponse<List<TopicResponseModel>?>> GetTopicsAsync(string dictCode)
+	{
+		var (statusCode, json) = await _requestHandler.SendGetRequestWithStatusAsync($"dictionaries/{dictCode}/topics");
+		return _responseHandler.HandleResponse<List<TopicResponseModel>?, ApiErrorResponse>(statusCode, json);
+	}
+
+	//getThesaurus
+	public async Task<string> GetThesaurusJsonAsync(string dictCode, string thesaurusName)
+	{
+		return await _requestHandler.SendGetRequestAsync($"dictionaries/{dictCode}/topics/{thesaurusName}");
+	}
 }
 

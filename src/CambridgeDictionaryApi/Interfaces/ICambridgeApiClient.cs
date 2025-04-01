@@ -30,11 +30,28 @@ public interface ICambridgeApiClient
 	Task<ApiResponse<List<EntryPronunciationResponseModel>?>> GetEntryPronunciationsAsync(string dictCode, string entryId, string format = "mp3", string lang = "uk");
 
 	//getRelatedEntries
+	Task<string> GetRelatedEntriesJsonAsync(string dictCode, string entryId);
+	Task<ApiResponse<RelatedEntryResponseModel?>> GetRelatedEntriesAsync(string dictCode, string entryId);
+
 	//search
+	Task<string> SearchJsonAsync(string dictCode, string query, int pageSize = 10, int pageIndex = 1);
+	Task<ApiResponse<SearchResponseModel?>> SearchAsync(string dictCode, string query, int pageSize = 10, int pageIndex = 1);
+
 	//didYouMean
+	Task<string> DidYouMeanJsonAsync(string dictCode, string query, int entryNumber = 10);
+	Task<ApiResponse<DidYouMeanResponseModel?>> DidYouMeanAsync(string dictCode, string query, int entryNumber = 10);
+
 	//searchFirst
+	Task<string> SearchFirstJsonAsync(string dictCode, string query, string format = "xml");
+	Task<ApiResponse<EntryResponseModel?>> SearchFirstAsync(string dictCode, string query, string format = "xml");
+
 	//getTopics
+	Task<string> GetTopicsJsonAsync(string dictCode);
+	Task<ApiResponse<List<TopicResponseModel>?>> GetTopicsAsync(string dictCode);
+
 	//getThesaurus
+	Task<string> GetThesaurusJsonAsync(string dictCode, string thesaurusName);
+
 	//getTopic
 	//getDictionaryWordOfTheDay
 	//getDictionaryWordOfTheDayPreview

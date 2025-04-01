@@ -134,4 +134,105 @@ public class CambridgeApiClientRealTests
 		var result = await _client.GetEntryPronunciationsAsync("british", "stand", "", "");
 		Assert.True(result != null && result.Data?.Count > 0);
 	}
+
+	//getRelatedEntries
+	[Fact]
+	public async Task GetRelatedEntries_RealRequest_ReturnsEntries_Json()
+	{
+		var result = await _client.GetRelatedEntriesJsonAsync("english-turkish", "stand");
+		Assert.Contains("entries", result.ToLower());
+	}
+
+	[Fact]
+	public async Task GetRelatedEntries_RealRequest_ReturnsEntries()
+	{
+		var result = await _client.GetRelatedEntriesAsync("english-turkish", "stand");
+		Assert.True(result != null && result.Data != null);
+	}
+
+	//search
+	[Fact]
+	public async Task Search_RealRequest_ReturnsEntries_Json()
+	{
+		var result = await _client.SearchJsonAsync("english-turkish", "stand", 10, 1);
+		Assert.Contains("entries", result.ToLower());
+	}
+
+	[Fact]
+	public async Task Search_RealRequest_ReturnsEntries()
+	{
+		var result = await _client.SearchAsync("english-turkish", "stand", 10, 1);
+		Assert.True(result != null && result.Data != null);
+	}
+
+	//didYouMean
+	[Fact]
+	public async Task DidYouMean_RealRequest_ReturnsEntries_Json()
+	{
+		var result = await _client.DidYouMeanJsonAsync("english-turkish", "stand", 10);
+		Assert.Contains("entries", result.ToLower());
+	}
+
+	[Fact]
+	public async Task DidYouMean_RealRequest_ReturnsEntries()
+	{
+		var result = await _client.DidYouMeanAsync("english-turkish", "stand", 10);
+		Assert.True(result != null && result.Data != null);
+	}
+
+	//searchFirst
+	[Fact]
+	public async Task SearchFirst_RealRequest_ReturnsEntries_Json()
+	{
+		var result = await _client.SearchFirstJsonAsync("english-turkish", "stand");
+		Assert.Contains("entries", result.ToLower());
+	}
+
+	[Fact]
+	public async Task SearchFirst_RealRequest_ReturnsEntries()
+	{
+		var result = await _client.SearchFirstAsync("english-turkish", "stand");
+		Assert.True(result != null && result.Data != null);
+	}
+
+	[Fact]
+	public async Task SearchFirst_RealRequest_EntryContextXmlTo()
+	{
+		var result = await _client.SearchFirstAsync("english-turkish", "stand");
+
+		if (result.Data?.EntryContent == null)
+		{
+			Assert.True(false);
+			return;
+		}
+
+		bool deserialized = result.Data.EntryContent.TryParseEntryContent(out var entryContent);
+
+		Assert.True(deserialized);
+		Assert.NotNull(entryContent);
+	}
+
+	//getTopics
+	[Fact]
+	public async Task GetTopics_RealRequest_ReturnsTopics_Json()
+	{
+		var result = await _client.GetTopicsJsonAsync("english-turkish");
+		Assert.Contains("topics", result.ToLower());
+	}
+
+	[Fact]
+	public async Task GetTopics_RealRequest_ReturnsTopics()
+	{
+		var result = await _client.GetTopicsAsync("english-turkish");
+		Assert.True(result != null && result.Data?.Count > 0);
+	}
+
+	//getThesaurus
+	[Fact]
+	public async Task GetThesaurusJsonAsync_Test()
+	{
+		var result = await _client.GetThesaurusJsonAsync("english", "topics");
+		Assert.Contains("topics", result.ToLower());
+			
+	}
 }

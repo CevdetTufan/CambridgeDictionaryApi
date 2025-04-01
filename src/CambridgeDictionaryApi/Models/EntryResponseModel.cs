@@ -7,5 +7,5 @@ public class EntryResponseModel
 	public string? EntryLabel { get; set; }
 	public string? EntryUrl { get; set; }
 	public string? Format { get; set; }
-	public List<TopicResponseModel>? Topics { get; set; }
+	public List<EntryTopicResponseModel>? Topics { get; set; }
 }
